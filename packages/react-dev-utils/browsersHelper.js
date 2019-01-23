@@ -9,6 +9,8 @@
 const browserslist = require('browserslist');
 const chalk = require('chalk');
 const os = require('os');
+
+// 交互式命令行模块
 const inquirer = require('inquirer');
 const pkgUp = require('pkg-up');
 const fs = require('fs');
@@ -20,6 +22,7 @@ const defaultBrowsers = [
   'not op_mini all',
 ];
 
+// 交互式命令行确定设置browserlist字段
 function shouldSetBrowsers(isInteractive) {
   if (!isInteractive) {
     return Promise.resolve(true);
@@ -36,15 +39,20 @@ function shouldSetBrowsers(isInteractive) {
     default: true,
   };
 
+  // 默认输出true
   return inquirer.prompt(question).then(answer => answer.shouldSetBrowsers);
 }
 
+
+// 检测样板项目运行的浏览器环境
 function checkBrowsers(dir, isInteractive, retry = true) {
   const current = browserslist.findConfig(dir);
   if (current != null) {
     return Promise.resolve(current);
   }
 
+
+  // 在项目的package.json文件添加browserlist字段，因为不同的浏览器对react特性支持不一样
   if (!retry) {
     return Promise.reject(
       new Error(
@@ -70,6 +78,8 @@ function checkBrowsers(dir, isInteractive, retry = true) {
           if (filePath == null) {
             return Promise.reject();
           }
+
+          // 在当前工作目录最近的package.json文件下设置browserlist。
           const pkg = JSON.parse(fs.readFileSync(filePath));
           pkg['browserslist'] = defaultBrowsers;
           fs.writeFileSync(filePath, JSON.stringify(pkg, null, 2) + os.EOL);

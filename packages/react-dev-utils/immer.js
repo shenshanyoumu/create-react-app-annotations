@@ -7,6 +7,8 @@
 
 'use strict';
 
+
+// immer基于ES6的proxy或者Es5的defineProperty来拦截对象属性访问
 var immer = require('immer');
 
 module.exports = immer;

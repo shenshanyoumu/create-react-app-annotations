@@ -13,6 +13,7 @@ const os = require('os');
 const chalk = require('chalk');
 const shellQuote = require('shell-quote');
 
+// 目前mac/Linux环境原生支持的浏览器应用
 function isTerminalEditor(editor) {
   switch (editor) {
     case 'vim':
@@ -272,6 +273,8 @@ function printInstructions(fileName, errorMessage) {
 }
 
 let _childProcess = null;
+
+// 打开指定浏览器
 function launchEditor(fileName, lineNumber, colNumber) {
   if (!fs.existsSync(fileName)) {
     return;
@@ -363,6 +366,8 @@ function launchEditor(fileName, lineNumber, colNumber) {
   if (process.platform === 'win32') {
     // On Windows, launch the editor in a shell because spawn can only
     // launch .exe files.
+
+    // 基于cmd命令窗口，执行编辑器实例
     _childProcess = child_process.spawn(
       'cmd.exe',
       ['/C', editor].concat(args),

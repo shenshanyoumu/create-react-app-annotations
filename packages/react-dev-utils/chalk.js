@@ -7,6 +7,8 @@
 
 'use strict';
 
+
+// 控制台输出模块
 var chalk = require('chalk');
 
 module.exports = chalk;

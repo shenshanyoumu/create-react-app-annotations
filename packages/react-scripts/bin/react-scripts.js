@@ -17,9 +17,12 @@ process.on('unhandledRejection', err => {
 const spawn = require('react-dev-utils/crossSpawn');
 const args = process.argv.slice(2);
 
+// 在生成的样板项目中支持下面几个脚本命令
 const scriptIndex = args.findIndex(
   x => x === 'build' || x === 'eject' || x === 'start' || x === 'test'
 );
+
+// 默认为build命令
 const script = scriptIndex === -1 ? args[0] : args[scriptIndex];
 const nodeArgs = scriptIndex > 0 ? args.slice(0, scriptIndex) : [];
 
@@ -28,13 +31,19 @@ switch (script) {
   case 'eject':
   case 'start':
   case 'test': {
+
+    // 子进程执行Node脚本，并输出控制台
     const result = spawn.sync(
       'node',
       nodeArgs
         .concat(require.resolve('../scripts/' + script))
+
+        // 下面是脚本启动参数列表
         .concat(args.slice(scriptIndex + 1)),
       { stdio: 'inherit' }
     );
+
+    // 该进程接收到外部信号，根据信号类型打印输出并退出进程
     if (result.signal) {
       if (result.signal === 'SIGKILL') {
         console.log(
@@ -51,9 +60,13 @@ switch (script) {
       }
       process.exit(1);
     }
+
+    // 异常的退出
     process.exit(result.status);
     break;
   }
+
+  // 非内置脚本命令，则打印如下信息
   default:
     console.log('Unknown script "' + script + '".');
     console.log('Perhaps you need to update react-scripts?');

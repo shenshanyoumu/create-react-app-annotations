@@ -7,6 +7,8 @@
 
 'use strict';
 
+
+// 交互式命令行工具
 var inquirer = require('inquirer');
 
 module.exports = inquirer;
