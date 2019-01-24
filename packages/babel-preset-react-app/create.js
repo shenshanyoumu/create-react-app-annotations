@@ -20,11 +20,14 @@ const validateBoolOption = (name, value, defaultValue) => {
   return value;
 };
 
+
+// 注意babel的preset,其实就是一组plugin列表
 module.exports = function(api, opts, env) {
   if (!opts) {
     opts = {};
   }
 
+  // 目前样板项目三个环境
   var isEnvDevelopment = env === 'development';
   var isEnvProduction = env === 'production';
   var isEnvTest = env === 'test';
@@ -67,7 +70,7 @@ module.exports = function(api, opts, env) {
   return {
     presets: [
       isEnvTest && [
-        // ES features necessary for user's Node version
+        // 测试环境
         require('@babel/preset-env').default,
         {
           targets: {
@@ -97,6 +100,7 @@ module.exports = function(api, opts, env) {
         },
       ],
       [
+        // 针对react的预置preset
         require('@babel/preset-react').default,
         {
           // Adds component stack to warning messages
@@ -181,6 +185,8 @@ module.exports = function(api, opts, env) {
         // Transform dynamic import to require
         require('babel-plugin-dynamic-import-node'),
     ].filter(Boolean),
+
+    // 提供覆盖能力
     overrides: [
       isFlowEnabled && {
         exclude: /\.tsx?$/,

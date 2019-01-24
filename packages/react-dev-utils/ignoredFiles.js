@@ -10,6 +10,7 @@
 const path = require('path');
 const escape = require('escape-string-regexp');
 
+// path.normalize进行文件路径规范化处理，以兼容不同系统平台表示方式
 module.exports = function ignoredFiles(appSrc) {
   return new RegExp(
     `^(?!${escape(

@@ -1,17 +1,4 @@
-/**
- * Copyright (c) 2015-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
 
-// This Webpack plugin lets us interpolate custom variables into `index.html`.
-// Usage: `new InterpolateHtmlPlugin(HtmlWebpackPlugin, { 'MY_VARIABLE': 42 })`
-// Then, you can use %MY_VARIABLE% in your `index.html`.
-
-// It works in tandem with HtmlWebpackPlugin.
-// Learn more about creating plugins like this:
-// https://github.com/ampedandwired/html-webpack-plugin#events
 
 'use strict';
 const escapeStringRegexp = require('escape-string-regexp');
@@ -27,7 +14,8 @@ class InterpolateHtmlPlugin {
       this.htmlWebpackPlugin
         .getHooks(compilation)
         .beforeEmit.tap('InterpolateHtmlPlugin', data => {
-          // Run HTML through a series of user-specified string replacements.
+         
+          // 针对HTML模板中的占位符进行字符串替换处理，注意这是一个Webpack插件
           Object.keys(this.replacements).forEach(key => {
             const value = this.replacements[key];
             data.html = data.html.replace(

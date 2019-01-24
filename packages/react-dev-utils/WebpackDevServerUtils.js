@@ -197,6 +197,8 @@ function createCompiler(webpack, config, appName, urls, useYarn) {
   return compiler;
 }
 
+
+// 浏览器代理回环检测
 function resolveLoopback(proxy) {
   const o = url.parse(proxy);
   o.host = undefined;
@@ -345,6 +347,8 @@ function prepareProxy(proxy, appPublicFolder) {
   ];
 }
 
+
+// 检测端口是否可用
 function choosePort(host, defaultPort) {
   return detect(defaultPort, host).then(
     port =>

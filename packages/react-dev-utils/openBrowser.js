@@ -22,9 +22,8 @@ const Actions = Object.freeze({
 });
 
 function getBrowserEnv() {
-  // Attempt to honor this environment variable.
-  // It is specific to the operating system.
-  // See https://github.com/sindresorhus/opn#app for documentation.
+  
+  // 应用设置了BROWSER环境变量来指定浏览器，否则使用默认动作 
   const value = process.env.BROWSER;
   let action;
   if (!value) {
@@ -37,9 +36,13 @@ function getBrowserEnv() {
   } else {
     action = Actions.BROWSER;
   }
+
+  // action表示打开浏览器还是执行JS脚本。
   return { action, value };
 }
 
+
+// 执行node脚本
 function executeNodeScript(scriptPath, url) {
   const extraArgs = process.argv.slice(2);
   const child = spawn('node', [scriptPath, ...extraArgs, url], {
@@ -61,19 +64,19 @@ function executeNodeScript(scriptPath, url) {
   return true;
 }
 
+
+
 function startBrowserProcess(browser, url) {
-  // If we're on OS X, the user hasn't specifically
-  // requested a different browser, we can try opening
-  // Chrome with AppleScript. This lets us reuse an
-  // existing tab when possible instead of creating a new one.
+ 
+  // 在mac环境下，默认启动chrome浏览器
   const shouldTryOpenChromeWithAppleScript =
     process.platform === 'darwin' &&
     (typeof browser !== 'string' || browser === OSX_CHROME);
 
+    // 在mac环境下
   if (shouldTryOpenChromeWithAppleScript) {
     try {
-      // Try our best to reuse existing tab
-      // on OS X Google Chrome with AppleScript
+      
       execSync('ps cax | grep "Google Chrome"');
       execSync('osascript openChrome.applescript "' + encodeURI(url) + '"', {
         cwd: __dirname,
@@ -85,16 +88,12 @@ function startBrowserProcess(browser, url) {
     }
   }
 
-  // Another special case: on OS X, check if BROWSER has been set to "open".
-  // In this case, instead of passing `open` to `opn` (which won't work),
-  // just ignore it (thus ensuring the intended behavior, i.e. opening the system browser):
-  // https://github.com/facebook/create-react-app/pull/1690#issuecomment-283518768
+ // 检查Mac环境下，browser环境变量是否已经变为open，如果为open则说明该浏览器已经打开不需要再次打开窗口
   if (process.platform === 'darwin' && browser === 'open') {
     browser = undefined;
   }
 
-  // Fallback to opn
-  // (It will always open new tab)
+//  跨平台打开某个应用
   try {
     var options = { app: browser };
     opn(url, options).catch(() => {}); // Prevent `unhandledRejection` error.
@@ -112,7 +111,7 @@ function openBrowser(url) {
   const { action, value } = getBrowserEnv();
   switch (action) {
     case Actions.NONE:
-      // Special case: BROWSER="none" will prevent opening completely.
+      // 不打开浏览器，则直接返回
       return false;
     case Actions.SCRIPT:
       return executeNodeScript(value, url);

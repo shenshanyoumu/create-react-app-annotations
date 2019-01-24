@@ -11,6 +11,8 @@ const chalk = require('chalk');
 const findUp = require('find-up');
 const path = require('path');
 
+
+// NPM模块未找到的插件
 class ModuleNotFoundPlugin {
   constructor(appPath, yarnLockFile) {
     this.appPath = appPath;
@@ -108,6 +110,8 @@ class ModuleNotFoundPlugin {
         return Object.assign({}, tap, {
           fn: (compilation, callback) => {
             tap.fn(compilation, (err, ...args) => {
+
+              // 如果没有找到模块，则格式化错误信息
               if (err && err.name === 'ModuleNotFoundError') {
                 err = prettierError(err);
               }

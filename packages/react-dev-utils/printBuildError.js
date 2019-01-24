@@ -9,6 +9,7 @@
 
 const chalk = require('chalk');
 
+// 打印输出构建错误信息
 module.exports = function printBuildError(err) {
   const message = err != null && err.message;
   const stack = err != null && err.stack;

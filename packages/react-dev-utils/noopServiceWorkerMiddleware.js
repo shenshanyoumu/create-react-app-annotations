@@ -7,6 +7,7 @@
 
 'use strict';
 
+// 基于express框架的中间件，用于创建空的ServiceWorker中间件
 module.exports = function createNoopServiceWorkerMiddleware() {
   return function noopServiceWorkerMiddleware(req, res, next) {
     if (req.url === '/service-worker.js') {

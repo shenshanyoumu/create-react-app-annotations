@@ -9,6 +9,8 @@
 
 const loaderUtils = require('loader-utils');
 
+
+// 辅助Webpack的CSS loader进行处理
 module.exports = function getLocalIdent(
   context,
   localIdentName,

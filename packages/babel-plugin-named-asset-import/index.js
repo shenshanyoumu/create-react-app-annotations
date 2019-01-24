@@ -2,6 +2,8 @@
 
 const { extname } = require('path');
 
+
+// Babel插件，其实就是包含visitor方法的对象
 function namedAssetImportPlugin({ types: t }) {
   const visited = new WeakSet();
 

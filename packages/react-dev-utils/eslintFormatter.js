@@ -18,6 +18,8 @@ function isError(message) {
   return false;
 }
 
+
+// 对eslint结果进行格式化输出
 function formatter(results) {
   let output = '\n';
   let hasErrors = false;
