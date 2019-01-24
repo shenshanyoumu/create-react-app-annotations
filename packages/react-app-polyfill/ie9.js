@@ -25,7 +25,7 @@ if (typeof window !== 'undefined') {
 // It will use the native implementation if it's present and isn't buggy.
 Object.assign = require('object-assign');
 
-// Support for...of (a commonly used syntax feature that requires Symbols)
+//下面基于babel-runtime来加载模块，以模拟ES6环境
 require('core-js/es6/symbol');
 // Support iterable spread (...Set, ...Map)
 require('core-js/fn/array/from');

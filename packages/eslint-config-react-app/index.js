@@ -23,6 +23,8 @@
 // To use them, explicitly reference them, e.g. `window.name` or `window.status`.
 var restrictedGlobals = require('confusing-browser-globals');
 
+
+// 配置ESLint
 module.exports = {
   root: true,
 

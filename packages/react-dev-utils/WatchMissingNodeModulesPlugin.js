@@ -11,6 +11,7 @@
 
 'use strict';
 
+// 这个插件的作用是监视缺失的Node模块
 class WatchMissingNodeModulesPlugin {
   constructor(nodeModulesPath) {
     this.nodeModulesPath = nodeModulesPath;

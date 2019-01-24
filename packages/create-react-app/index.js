@@ -38,6 +38,8 @@
 
 var chalk = require('chalk');
 
+
+// Node版本低于8，则报错
 var currentNodeVersion = process.versions.node;
 var semver = currentNodeVersion.split('.');
 var major = semver[0];

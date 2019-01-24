@@ -28,12 +28,15 @@ class InlineChunkHtmlPlugin {
     return { tagName: 'script', innerHTML: asset.source(), closeTag: true };
   }
 
+
+  // Webpack插件必须实现apply方法
   apply(compiler) {
     let publicPath = compiler.options.output.publicPath;
     if (!publicPath.endsWith('/')) {
       publicPath += '/';
     }
 
+    // Webpack4.X版本，需要使用hooks来注册插件
     compiler.hooks.compilation.tap('InlineChunkHtmlPlugin', compilation => {
       const tagFunction = tag =>
         this.getInlinedTag(publicPath, compilation.assets, tag);

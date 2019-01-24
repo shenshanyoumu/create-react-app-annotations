@@ -7,6 +7,7 @@
 
 'use strict';
 
+// 用户友好的全局正则匹配库
 var globby = require('globby');
 
 module.exports = globby;

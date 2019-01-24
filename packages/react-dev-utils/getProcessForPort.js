@@ -20,16 +20,19 @@ var execOptions = {
   ],
 };
 
+// 表示执行的进程是否是一个react应用
 function isProcessAReactApp(processCommand) {
   return /^node .*react-scripts\/scripts\/start\.js\s?$/.test(processCommand);
 }
 
+// 获得特定端口上的运行进程ID
 function getProcessIdOnPort(port) {
   return execSync('lsof -i:' + port + ' -P -t -sTCP:LISTEN', execOptions)
     .split('\n')[0]
     .trim();
 }
 
+// 获得package.json文件的name字段
 function getPackageNameInDirectory(directory) {
   var packagePath = path.join(directory.trim(), 'package.json');
 

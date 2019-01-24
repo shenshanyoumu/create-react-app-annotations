@@ -7,6 +7,7 @@
 
 'use strict';
 
+// 基于window对象的一系列常见属性
 module.exports = [
   'addEventListener',
   'blur',
