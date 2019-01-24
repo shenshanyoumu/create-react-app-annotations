@@ -8,6 +8,8 @@ function namedAssetImportPlugin({ types: t }) {
   const visited = new WeakSet();
 
   function generateNewSourcePath(loaderMap, moduleName, sourcePath) {
+
+    // 返回文件扩展名
     const ext = extname(sourcePath).substr(1);
     const extMap = loaderMap[ext];
     return extMap[moduleName]

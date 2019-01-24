@@ -20,6 +20,7 @@ const cleanup = () => {
   // rm ./template/src/__snapshots__/App.test.js.snap
 };
 
+// 
 const handleExit = () => {
   cleanup();
   console.log('Exiting without error.');
@@ -34,6 +35,7 @@ const handleError = e => {
   process.exit(1);
 };
 
+// 当前node 进程监听外部信息或者异常
 process.on('SIGINT', handleExit);
 process.on('uncaughtException', handleError);
 
