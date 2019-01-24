@@ -7,9 +7,7 @@
  */
 'use strict';
 
-// Makes the script crash on unhandled rejections instead of silently
-// ignoring them. In the future, promise rejections that are not handled will
-// terminate the Node.js process with a non-zero exit code.
+// 当前Node进程出错，则抛出异常
 process.on('unhandledRejection', err => {
   throw err;
 });
@@ -19,10 +17,14 @@ const path = require('path');
 const chalk = require('react-dev-utils/chalk');
 const execSync = require('child_process').execSync;
 const spawn = require('react-dev-utils/crossSpawn');
+
+// 在生成的样板项目的package.json添加browserList字段
 const { defaultBrowsers } = require('react-dev-utils/browsersHelper');
 const os = require('os');
 const verifyTypeScriptSetup = require('./utils/verifyTypeScriptSetup');
 
+
+// 表示样板项目是否已经有.git仓库了
 function isInGitRepository() {
   try {
     execSync('git rev-parse --is-inside-work-tree', { stdio: 'ignore' });
@@ -32,6 +34,7 @@ function isInGitRepository() {
   }
 }
 
+// 针对mercurial管理的代码仓库检测
 function isInMercurialRepository() {
   try {
     execSync('hg --cwd . root', { stdio: 'ignore' });
@@ -41,6 +44,8 @@ function isInMercurialRepository() {
   }
 }
 
+
+// 针对样板项目进行git init处理
 function tryGitInit(appPath) {
   let didInit = false;
   try {
@@ -75,6 +80,13 @@ function tryGitInit(appPath) {
   }
 }
 
+/**
+ * appPath表示样板项目路径
+ * appName表示样板项目的package.json中设置的name字段
+ * verbose表示生成完备的样板项目过程中是否输出额外的信息
+ * originalDirectory表示当前Node进程的执行目录
+ * template表示生成样板项目结构的目录
+ */
 module.exports = function(
   appPath,
   appName,
@@ -82,10 +94,16 @@ module.exports = function(
   originalDirectory,
   template
 ) {
+
+  // 表示react-scripts模块自身的package.json
   const ownPath = path.dirname(
     require.resolve(path.join(__dirname, '..', 'package.json'))
   );
+
+  // 表示生成的模板项目的package.json
   const appPackage = require(path.join(appPath, 'package.json'));
+
+  // 如果使用yarn安装，则模板项目根目录一定存在yarn.lock文件来锁定模块版本
   const useYarn = fs.existsSync(path.join(appPath, 'yarn.lock'));
 
   // Copy over some of the devDependencies
@@ -93,7 +111,7 @@ module.exports = function(
 
   const useTypeScript = appPackage.dependencies['typescript'] != null;
 
-  // Setup the script rules
+  // 针对模板项目的package.json文件添加scripts
   appPackage.scripts = {
     start: 'react-scripts start',
     build: 'react-scripts build',
@@ -101,19 +119,21 @@ module.exports = function(
     eject: 'react-scripts eject',
   };
 
-  // Setup the eslint config
+  //添加eslint配置
   appPackage.eslintConfig = {
     extends: 'react-app',
   };
 
-  // Setup the browsers list
+  // 添加browserList信息
   appPackage.browserslist = defaultBrowsers;
 
+  // 将上面的信息全部写入模板项目的package.json文件中
   fs.writeFileSync(
     path.join(appPath, 'package.json'),
     JSON.stringify(appPackage, null, 2) + os.EOL
   );
 
+  // 如果模板项目存在README.md文件，则重命名为READEM.old.md 文件
   const readmeExists = fs.existsSync(path.join(appPath, 'README.md'));
   if (readmeExists) {
     fs.renameSync(
@@ -122,7 +142,7 @@ module.exports = function(
     );
   }
 
-  // Copy the files for the user
+  //默认将react-scripts模块下的template目录结构进行拷贝
   const templatePath = template
     ? path.resolve(originalDirectory, template)
     : path.join(ownPath, useTypeScript ? 'template-typescript' : 'template');
@@ -135,8 +155,7 @@ module.exports = function(
     return;
   }
 
-  // Rename gitignore after the fact to prevent npm from renaming it to .npmignore
-  // See: https://github.com/npm/npm/issues/1862
+// 在模板项目中添加.gitignore文件
   try {
     fs.moveSync(
       path.join(appPath, 'gitignore'),
@@ -164,6 +183,8 @@ module.exports = function(
     command = 'npm';
     args = ['install', '--save', verbose && '--verbose'].filter(e => e);
   }
+
+  // 
   args.push('react', 'react-dom');
 
   // Install additional template dependencies, if present
@@ -171,6 +192,8 @@ module.exports = function(
     appPath,
     '.template.dependencies.json'
   );
+
+
   if (fs.existsSync(templateDependenciesPath)) {
     const templateDependencies = require(templateDependenciesPath).dependencies;
     args = args.concat(
@@ -195,10 +218,12 @@ module.exports = function(
     }
   }
 
+  // 模板项目使用TS
   if (useTypeScript) {
     verifyTypeScriptSetup();
   }
 
+  // 对样板项目进行git init处理
   if (tryGitInit(appPath)) {
     console.log();
     console.log('Initialized a git repository.');
@@ -258,6 +283,8 @@ module.exports = function(
   console.log('Happy hacking!');
 };
 
+
+// 判定模板项目中是否已经安装了react和react-dom
 function isReactInstalled(appPackage) {
   const dependencies = appPackage.dependencies || {};
 

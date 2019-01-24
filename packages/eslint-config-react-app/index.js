@@ -24,7 +24,7 @@
 var restrictedGlobals = require('confusing-browser-globals');
 
 
-// 配置ESLint
+// 配置ESLint，在react-scripts包中会安装eslint-config-react-app模块
 module.exports = {
   root: true,
 
