@@ -2,7 +2,7 @@
 
 const { extname } = require('path');
 
-
+// 在react-scripts包中会安装babel-plugin-named-asset-import模块
 // Babel插件，其实就是包含visitor方法的对象
 function namedAssetImportPlugin({ types: t }) {
   const visited = new WeakSet();

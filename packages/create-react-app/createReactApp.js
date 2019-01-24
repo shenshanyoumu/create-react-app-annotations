@@ -489,6 +489,7 @@ function run(
 
 
       // 当样板项目的依赖安装成功后，执行react-scripts的init过程
+      // 注意Init的参数为[root, appName, verbose, originalDirectory, template]
       await executeNodeScript(
         {
           cwd: process.cwd(),

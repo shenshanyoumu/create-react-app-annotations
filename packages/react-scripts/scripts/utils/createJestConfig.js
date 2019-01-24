@@ -11,6 +11,8 @@ const fs = require('fs');
 const chalk = require('react-dev-utils/chalk');
 const paths = require('../../config/paths');
 
+
+// 当处理reject时，下面的config都会配置到模板项目的package.json文件中的jest字段
 module.exports = (resolve, rootDir, isEjecting) => {
   // Use this instead of `paths.testsSetup` to avoid putting
   // an absolute filename into configuration after ejecting.
