@@ -8,6 +8,7 @@
 
 const path = require('path');
 
+// 模板项目的打包配置
 module.exports = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   entry: './src/index.js',
